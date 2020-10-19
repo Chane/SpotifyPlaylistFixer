@@ -1,0 +1,30 @@
+﻿@model SpotifyPlaylistFixer.DisplayModels.ComparisonDisplayModel
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tracks for @Model.PlaylistName</title>    
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: 50% 50%;
+            background-color: #2196F3;
+            padding: 10px;
+        }
+        .grid-item {
+            background-color: white;
+            border: 1px solid black;
+            padding: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h3><a href="/playlists/display">&#171; Back</a> Playlist: @Model.PlaylistName</h3>
+        <div class="grid-container">
+            <div class="grid-item">@await Html.PartialAsync("_TracksDisplay", @Model.OriginalTracks)</div>
+            <div class="grid-item">@await Html.PartialAsync("_TracksDisplay", @Model.SuggestedTracks)</div>
+        </div>
+    </div>
+    <div><a href="/playlist/display/@Model.PlaylistId/DoFix">Complete Fix</a></div>
+</body>
+</html>

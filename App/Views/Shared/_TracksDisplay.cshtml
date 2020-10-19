@@ -1,0 +1,18 @@
+﻿@model SpotifyPlaylistFixer.DisplayModels.MyPlaylistTracksDisplayModel
+
+<div>
+    @foreach (var track in Model.Tracks)
+    {
+        <div style="border-bottom:1px solid lightgray">
+            @if (track.IsLocal)
+            {
+                <span style="color: red">(local)</span>
+            }
+            else
+            {
+                <span style="color: green">(spotify)</span>
+            }
+            <b>@track.TrackName</b> by <b>@track.Artist</b> from <b>@track.Album</b> [@Html.Raw(track.SpotifyUri)]
+        </div>
+    }
+</div>

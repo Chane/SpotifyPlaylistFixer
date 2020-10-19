@@ -1,0 +1,40 @@
+﻿@model SpotifyPlaylistFixer.DisplayModels.MyPlaylistsDisplayModel
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Playlists</title>
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: auto auto auto auto auto;
+            background-color: #2196F3;
+            padding: 10px;
+        }
+        .grid-item {
+            background-color: white;
+            border: 1px solid black;
+            padding: 2px;
+        }
+    </style>
+</head>
+<body>
+    <h3>Playlists (@Model.PageNumber of @Model.TotalPages)</h3>
+    <div class="grid-container">
+        @foreach (var playlist in Model.Playlists)
+        {
+            <div class="grid-item">@playlist.PlaylistName</div>
+            <div class="grid-item"><a href="~/comparison/@playlist.PlaylistId">[Compare]</a></div>
+            <div class="grid-item"><a href="~/playlist/display/@playlist.PlaylistId">[View]</a></div>
+            <div class="grid-item"><a href="~/playlist/display/@playlist.PlaylistId/CheckFix">[Check]</a></div>
+            <div class="grid-item"><a href="~/playlist/display/@playlist.PlaylistId/DoFix">[Do]</a></div>
+
+        }
+    </div>
+    @if (Model.PageNumber != 1) { <a href="~/Playlists/Display?page=@(Model.PageNumber - 1)">&#171; Previous</a> }
+    @for (int i = 1; i <= Model.TotalPages ; i++)
+    {
+    <a href="~/Playlists/Display?page=@i">@i</a>
+    }
+    @if (Model.PageNumber != Model.TotalPages) { <a href="~/Playlists/Display?page=@(Model.PageNumber + 1)">Next &#187;</a> }
+</body>
+</html>

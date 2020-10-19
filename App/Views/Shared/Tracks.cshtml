@@ -1,0 +1,15 @@
+﻿@model SpotifyPlaylistFixer.DisplayModels.MyPlaylistTracksDisplayModel
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tracks for @Model.PlaylistName</title>
+</head>
+<body>
+    <div>
+        <h3><a href="/playlists/display">&#171; Back</a> Playlist: @Model.PlaylistName</h3>
+        @await Html.PartialAsync("_TracksDisplay", @Model)
+    </div>
+    <div><a href="/playlist/display/@Model.PlaylistId/CheckFix">Check</a></div>
+    <div><a href="/playlist/display/@Model.PlaylistId/DoFix">Do</a></div>
+</body>
+</html>
