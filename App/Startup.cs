@@ -1,5 +1,7 @@
 ﻿namespace SpotifyPlaylistFixer
 {
+    using System;
+
     using FluentSpotifyApi.AuthorizationFlows.AspNetCore.AuthorizationCode.Extensions;
     using FluentSpotifyApi.AuthorizationFlows.AspNetCore.AuthorizationCode.Handler;
     using FluentSpotifyApi.Extensions;
@@ -16,8 +18,10 @@
 
     public class Startup
     {
-        private const string ClientId = "..."; // need to get these from spotify
-        private const string ClientSecret = "..."; // need to get these from spotify
+        private const string ClientIdEnvironmentVariable = "SPOTIFY_CLIENT_ID";
+
+        private const string ClientSecretEnvironmentVariable = "SPOTIFY_CLIENT_SECRET";
+
         private const string SpotifyAuthenticationScheme = SpotifyDefaults.AuthenticationScheme;
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -85,6 +89,9 @@
 
         private static void ConfigureSpotifyClient(IServiceCollection services)
         {
+            var clientId = GetRequiredEnvironmentVariable(ClientIdEnvironmentVariable);
+            var clientSecret = GetRequiredEnvironmentVariable(ClientSecretEnvironmentVariable);
+
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services
                 .AddFluentSpotifyClient(clientBuilder => clientBuilder
@@ -104,14 +111,25 @@
                     SpotifyAuthenticationScheme,
                     o =>
                         {
-                            o.ClientId = ClientId;
-                            o.ClientSecret = ClientSecret;
+                            o.ClientId = clientId;
+                            o.ClientSecret = clientSecret;
                             o.Scope.Add("playlist-read-private");
                             o.Scope.Add("playlist-read-collaborative");
                             o.Scope.Add("playlist-modify-public");
                             o.Scope.Add("playlist-modify-private");
                             o.SaveTokens = true;
                         });
+        }
+
+        private static string GetRequiredEnvironmentVariable(string variableName)
+        {
+            var value = Environment.GetEnvironmentVariable(variableName);
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+
+            throw new InvalidOperationException($"Missing required environment variable: {variableName}");
         }
     }
 }
