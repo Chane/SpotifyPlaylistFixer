@@ -13,9 +13,9 @@ SpotifyPlaylistFixer is an ASP.NET Core MVC app that helps you repair Spotify pl
 
 ## Current Tech Stack
 
-- .NET Core target: `netcoreapp2.1` (legacy/EOL).
-- Web framework: ASP.NET Core MVC.
-- Spotify integration: FluentSpotifyApi.
+- .NET target: `net8.0`.
+- Web framework: ASP.NET Core MVC with minimal hosting.
+- Spotify integration: FluentSpotifyApi 2.x.
 - Tests: NUnit + Moq.
 
 ## Setup
@@ -41,7 +41,11 @@ export SPOTIFY_CLIENT_ID="your-client-id"
 export SPOTIFY_CLIENT_SECRET="your-client-secret"
 ```
 
-### 3. Restore and run
+### 3. Install .NET 8 SDK
+
+Use .NET SDK `8.0.x` (the repo includes `global.json` to pin this major version).
+
+### 4. Restore and run
 
 ```bash
 dotnet restore SpotifyPlaylistFixer.sln
@@ -86,5 +90,5 @@ on push to `main` and on pull requests.
 
 ## Known Limitations
 
-- Project targets `netcoreapp2.1`, which is out of support.
-- Build can emit dependency-version conflict warnings due to legacy package graph.
+- Spotify API ecosystem upgrades can introduce authentication-flow behavior changes between major package versions.
+- If FluentSpotifyApi runtime behavior changes unexpectedly, fallback migration target is `net6.0` LTS with the same hosting model.
